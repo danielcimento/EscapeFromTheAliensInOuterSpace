@@ -32,8 +32,8 @@ public class GameEngine implements GameEngineView, GameEngineController {
 		//This should NEVER happen
 		return MapNode.get("a1");
 	}
-	
-    public void addChatListener(GameEngineListener listener){
+
+    public void addGameEngineListener(GameEngineListener listener){
     	gameEngineListeners.add(listener);
     }
 

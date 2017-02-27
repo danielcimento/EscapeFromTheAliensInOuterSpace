@@ -2,8 +2,10 @@ package view;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import map.MapNode;
 import map.NodeType;
 import model.GameClient;
+import model.GameClientController;
 
 
 /* Mathematics of Hexagons (for personal reference). When creating a hexagon centered at x, y with a distance of
@@ -19,12 +21,12 @@ import model.GameClient;
 public class HexagonShape extends Polygon{
 	String coordinate;
 	
-	public HexagonShape(double xCoordinate, double yCoordinate, double size, String coordinateName){
+	public HexagonShape(double xCoordinate, double yCoordinate, double size, String coordinateName, GameClientController client){
 		super(calculateCoordinates(xCoordinate, yCoordinate, size));
 		setFill(Color.WHITE);
 		setStroke(Color.BLACK);
 		coordinate = coordinateName;
-		setOnMouseClicked(e -> System.out.println(coordinate));
+		setOnMouseClicked(e -> client.mapNodeSelected(MapNode.get(coordinate)));
 	}
 	
 	public void setHexType(NodeType t){

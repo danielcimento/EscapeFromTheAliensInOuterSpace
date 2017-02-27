@@ -11,6 +11,9 @@ import model.GameClient;
 
 public class SocialView extends VBox implements ChatListener{
 	private static final int MARGIN_OUTER = 10;
+	private static final int SOCIAL_VIEW_WIDTH = 300;
+	private static final int MESSAGE_DISPLAY_HEIGHT = 700;
+	private static final int PLAYERS_LIST_HEIGHT = 180;
 	
 	private GameClient client;
 	private TextField messageArea;
@@ -22,28 +25,25 @@ public class SocialView extends VBox implements ChatListener{
 		
 		//Text field for sending messages
 		messageArea = new TextField();
+		messageArea.setPromptText("Type chat messages here");
 		messageArea.setOnAction(e -> sendMessage());
 		
 		//Scroll pane with chat messages
 		ScrollPane chatScroll = new ScrollPane();
 		messageDisplay = new TextArea();
 		messageDisplay.setEditable(false);
-		messageDisplay.setPrefSize(200, 600);
+		messageDisplay.setPrefSize(SOCIAL_VIEW_WIDTH, MESSAGE_DISPLAY_HEIGHT);
 		messageDisplay.setWrapText(true);
 		
 		//Scroll pane with current players
-		ScrollPane playersScroll = new ScrollPane();
 		TextArea playersList = new TextArea();
 		playersList.setEditable(false);
-		playersList.setPrefSize(200, 120);
+		playersList.setPrefSize(SOCIAL_VIEW_WIDTH, PLAYERS_LIST_HEIGHT);
 		
 		//Setting scroll contents and settings
 		chatScroll.setContent(messageDisplay);
-		playersScroll.setContent(playersList);
-		chatScroll.setPrefSize(200, 600);
-		playersScroll.setPrefSize(200, 120);
+		chatScroll.setPrefSize(SOCIAL_VIEW_WIDTH, MESSAGE_DISPLAY_HEIGHT);
 		chatScroll.setHbarPolicy(ScrollBarPolicy.NEVER);
-		playersScroll.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		
 		//Labels
 		Label playersLabel = new Label("Players:");
@@ -54,7 +54,7 @@ public class SocialView extends VBox implements ChatListener{
 		chatAndMessages.setSpacing(5);
 		
 		setSpacing(20);
-		getChildren().addAll(playersLabel, playersScroll, chatLabel, chatAndMessages);
+		getChildren().addAll(playersLabel, playersList, chatLabel, chatAndMessages);
 		
 		client.registerChatListener(this);
 	}

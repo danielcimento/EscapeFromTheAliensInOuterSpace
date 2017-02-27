@@ -8,7 +8,7 @@ import view.MovementListener;
 
 //The Game Client has an interesting position of being both observable and an observer.
 
-public class GameClient {
+public class GameClient implements GameEngineListener, GameClientController{
 	//Model Data
 	private Player localPlayer;
 	private GameEngineController engine; //TODO: Figure out what to do with the creation of the game engine controller
@@ -19,11 +19,17 @@ public class GameClient {
 	private ArrayList<GameListener> gameListeners = new ArrayList<>();
 	private ArrayList<MovementListener> movementListeners = new ArrayList<>();
 	
-	public GameClient(GameEngine e){
+	public GameClient(Player p, GameEngine e){
+		localPlayer = p;
 		engine = e;
 		view = e;
+		e.addGameEngineListener(this);
 	}
 	
+	//Observer Methods
+	public void newChatMessage(String s){
+		notifyChatListeners(s);
+	}
 	
 	//View Methods
 	public String getUsername(){
@@ -42,6 +48,14 @@ public class GameClient {
 	public void processMessage(String message){
 		message = getUsername() + ": " + message;
 		engine.addMessage(message);
+	}
+	
+	public void mapNodeSelected(MapNode m){
+		//Do stuff
+		//Placeholder
+		for(GameListener gL : gameListeners){
+			gL.gameStateChanged(m.getName());
+		}
 	}
 	
 	//Observable Methods
