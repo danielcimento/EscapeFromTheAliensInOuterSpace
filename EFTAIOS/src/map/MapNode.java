@@ -32,15 +32,6 @@ public class MapNode{
         aName = pName;
     }
 
-    //tester method
-    public static void main(String[] args){
-        initNodes("samplefile.txt");
-        MapNode n = ALL_NODES.get("a1");
-        System.out.println(n.listAdjacencies());
-        MapNode t = ALL_NODES.get("n10");
-        System.out.println(t.listAdjacencies());
-        System.out.println(t.aType);
-    }
 
     public static boolean hasNode(String input){
             return ALL_NODES.containsKey(input);
@@ -51,25 +42,15 @@ public class MapNode{
     }
 
 
-    public static void initNodes(String pFileName){
-        File file = new File(pFileName);
-        Scanner reader;
-        int rowPointer = 0;
-        try{
-            reader = new Scanner(file);
-            while(reader.hasNextLine()){
-                String currLine = reader.nextLine();
-                for(int i = 0; i < currLine.length(); i++){
-                    String nodeName = nodePrefixes[i] + nodeSuffixes[rowPointer];
-                    MapNode node = new MapNode(charCorrespondence.get(currLine.charAt(i)), nodeName);
-                    ALL_NODES.put(nodeName, node);
-                }
-                rowPointer++;
-            }
-        }catch(IOException e){
-            System.out.println("Bad File!");
-            return;
-        }
+    public static void initNodes(MapConfiguration cfg){
+    	for(char pre : nodePrefixes){
+    		for(String suf : nodeSuffixes){
+    			String id = pre + suf;
+    			NodeType type = cfg.getNodeType(id);
+    			MapNode node = new MapNode(type, id);
+    			ALL_NODES.put(id, node);
+    		}
+    	}
         connectAdjacencies();
     }
 

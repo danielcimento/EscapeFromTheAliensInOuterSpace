@@ -14,7 +14,6 @@ public class PlayerCharacter{
 
 
     public static void main(String[] args){
-        MapNode.initNodes("src/resources/samplefile.txt");
         PlayerCharacter tom = new PlayerCharacter(CharacterType.HUMAN, MapNode.get("a3"));
         System.out.println(tom.currentPosition.getName());
         System.out.println(tom.currentPosition.getName());

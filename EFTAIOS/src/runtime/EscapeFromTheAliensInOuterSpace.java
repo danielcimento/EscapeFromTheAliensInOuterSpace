@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import map.MapConfiguration;
 import map.MapNode;
 import model.CharacterType;
 import model.GameClient;
@@ -35,7 +36,8 @@ public class EscapeFromTheAliensInOuterSpace extends Application{
 		client = new GameClient(initializeLocalPlayer(), engine);
 		
 		HBox root = new HBox();
-		MapNode.initNodes("src/resources/galilei.txt");
+		MapConfiguration cfg = MapConfiguration.loadFromFile("src/resources/galilei.ser");
+		MapNode.initNodes(cfg);
 		root.getChildren().add(new GameView(client));
 		root.getChildren().add(new SocialView(client));
 		stage.setTitle(TITLE + " - " + VERSION_NUMBER);
