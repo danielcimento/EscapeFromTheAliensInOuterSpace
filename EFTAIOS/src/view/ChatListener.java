@@ -1,5 +1,7 @@
 package view;
 
+import model.ChatMessage;
+
 public interface ChatListener {
-	public void newChatMessages(String... messages);
+	public void newChatMessage(String message);
 }

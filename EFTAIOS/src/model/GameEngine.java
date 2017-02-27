@@ -1,20 +1,23 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import map.MapNode;
 import view.ChatListener;
 
 public class GameEngine implements GameEngineView, GameEngineController {
 	private ArrayList<PlayerCharacter> characters = new ArrayList<>();
-	private ArrayList<String> messages = new ArrayList<>();
 	private ArrayList<GameEngineListener> gameEngineListeners = new ArrayList<>();
+	private ArrayList<Action> actionHistory = new ArrayList<>();
+	private ArrayList<ChatMessage> messages = new ArrayList<>();
 	
 	@Override
-    public void addMessage(String s){
-    	messages.add(s);
+    public void addMessage(ChatMessage msg){
+    	messages.add(msg);
     	for(GameEngineListener gL : gameEngineListeners){
-    		gL.newChatMessage(s);
+    		gL.newChatMessage(msg);
     	}
     }
     
@@ -36,5 +39,19 @@ public class GameEngine implements GameEngineView, GameEngineController {
     public void addGameEngineListener(GameEngineListener listener){
     	gameEngineListeners.add(listener);
     }
+
+	@Override
+	public List<ChatMessage> getMessagesAfter(ChatMessage chatMessage) {
+		LinkedList<ChatMessage> newMessages = new LinkedList<>();
+		int ptr = messages.size() - 1;
+		//move back through the list, until the hash codes align and the messages align
+		while(chatMessage.hashCode() != messages.get(ptr).hashCode() 
+				|| chatMessage.equals(messages.get(ptr).hashCode())){
+			newMessages.addFirst(messages.get(ptr));
+			ptr--;
+		}
+		
+		return newMessages;
+	}
 
 }

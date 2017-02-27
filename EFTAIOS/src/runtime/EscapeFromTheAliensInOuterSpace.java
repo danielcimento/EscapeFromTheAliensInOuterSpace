@@ -20,6 +20,7 @@ public class EscapeFromTheAliensInOuterSpace extends Application{
 	private static final int WIDTH = 1320;
 	private static final int HEIGHT = 1000;
 	private static final String TITLE = "Escape from the Aliens in Outer Space";
+	private static final String VERSION_NUMBER = "v0.1";
 	
 	private GameEngine engine = new GameEngine();
 	private GameClient client;
@@ -37,7 +38,7 @@ public class EscapeFromTheAliensInOuterSpace extends Application{
 		MapNode.initNodes("src/resources/galilei.txt");
 		root.getChildren().add(new GameView(client));
 		root.getChildren().add(new SocialView(client));
-		stage.setTitle(TITLE);
+		stage.setTitle(TITLE + " - " + VERSION_NUMBER);
 		stage.setResizable(false);
         stage.setScene(new Scene(root, WIDTH, HEIGHT));
         stage.show();

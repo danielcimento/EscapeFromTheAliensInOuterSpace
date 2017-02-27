@@ -14,6 +14,8 @@ public class GameClient implements GameEngineListener, GameClientController{
 	private GameEngineController engine; //TODO: Figure out what to do with the creation of the game engine controller
 	private GameEngineView view;
 	
+	private ArrayList<ChatMessage> receivedMessages = new ArrayList<>();
+	
 	//Observable Data
 	private ArrayList<ChatListener> chatListeners = new ArrayList<>();
 	private ArrayList<GameListener> gameListeners = new ArrayList<>();
@@ -26,9 +28,18 @@ public class GameClient implements GameEngineListener, GameClientController{
 		e.addGameEngineListener(this);
 	}
 	
+	//this method will be used once networking is established to pull from the model
+	public void pullStateFromEngine(){
+		for(ChatMessage msg : engine.getMessagesAfter(receivedMessages.get(receivedMessages.size() - 1))){
+			receivedMessages.add(msg);
+		}
+	}
+	
 	//Observer Methods
-	public void newChatMessage(String s){
-		notifyChatListeners(s);
+	@Override
+	public void newChatMessage(ChatMessage msg){
+		receivedMessages.add(msg);
+		notifyChatListeners(msg);
 	}
 	
 	//View Methods
@@ -47,7 +58,8 @@ public class GameClient implements GameEngineListener, GameClientController{
 	//Controller Methods
 	public void processMessage(String message){
 		message = getUsername() + ": " + message;
-		engine.addMessage(message);
+		ChatMessage msg = new ChatMessage(message, localPlayer);
+		engine.addMessage(msg);
 	}
 	
 	public void mapNodeSelected(MapNode m){
@@ -73,9 +85,9 @@ public class GameClient implements GameEngineListener, GameClientController{
 		if(index != -1){ chatListeners.remove(index); }
 	}
 	
-	public void notifyChatListeners(String s){
+	public void notifyChatListeners(ChatMessage cM){
 		for(ChatListener c : chatListeners){
-			c.newChatMessages(s);
+			c.newChatMessage(cM.getMessage());
 		}
 	}
 	

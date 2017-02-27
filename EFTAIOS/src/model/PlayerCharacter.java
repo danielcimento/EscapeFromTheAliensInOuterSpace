@@ -17,9 +17,6 @@ public class PlayerCharacter{
         MapNode.initNodes("src/resources/samplefile.txt");
         PlayerCharacter tom = new PlayerCharacter(CharacterType.HUMAN, MapNode.get("a3"));
         System.out.println(tom.currentPosition.getName());
-        tom.move("b3");
-        tom.move("c3");
-        tom.move("d3");
         System.out.println(tom.currentPosition.getName());
         PlayerCharacter jeff = new PlayerCharacter(CharacterType.ALIEN, MapNode.get("a3"));
         System.out.println(jeff.isValidMove(MapNode.get("b3")));
@@ -73,10 +70,9 @@ public class PlayerCharacter{
     }
 
 
-    public void move(String destString){
-        MapNode dest = MapNode.get(destString);
-        if(isValidMove(dest)){
-            currentPosition = dest;
+    public void move(MapNode m){
+        if(isValidMove(m)){
+            currentPosition = m;
         }
         if(currentPosition.getType() == NodeType.DANGEROUS){
             handleCard(DangerousSectorCard.draw());

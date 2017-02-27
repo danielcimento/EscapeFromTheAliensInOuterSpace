@@ -1,6 +1,7 @@
 package view;
 
 import javafx.scene.paint.Color;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.text.Text;
@@ -67,16 +68,20 @@ public class HexagonGrid extends Group implements MovementListener {
 	
 	//The location of the local player should be bordered with orange.
 	public void updateLocalPlayerLocation(MapNode m){
+		
 		for(Node n : this.getChildren()){
+			
 			if(n instanceof HexagonShape){
 				HexagonShape hex = (HexagonShape)n;
-				if(hex.getStroke().equals(Color.ORANGE)){
-					hex.setStroke(Color.BLACK);
-				}
-				if(m.getName().equals(hex.coordinate)){
-					hex.setStroke(Color.ORANGE);
+				
+				if(hex.isSelectedStroke()){
+					hex.setDefaultStroke();
+				}else if(m.getName().equals(hex.coordinate)){
+					hex.setSelectedStroke();
 				}
 			}
+			
 		}
+		
 	}
 }

@@ -8,6 +8,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import model.GameClient;
+import model.GameClientController;
 
 public class SocialView extends VBox implements ChatListener{
 	private static final int MARGIN_OUTER = 10;
@@ -15,11 +16,11 @@ public class SocialView extends VBox implements ChatListener{
 	private static final int MESSAGE_DISPLAY_HEIGHT = 700;
 	private static final int PLAYERS_LIST_HEIGHT = 180;
 	
-	private GameClient client;
+	private GameClientController client;
 	private TextField messageArea;
 	private TextArea messageDisplay;
 	
-	public SocialView(GameClient pClient){
+	public SocialView(GameClientController pClient){
 		this.setPadding(new Insets(MARGIN_OUTER));
 		client = pClient;
 		
@@ -66,9 +67,7 @@ public class SocialView extends VBox implements ChatListener{
 	}
 	
 	@Override
-	public void newChatMessages(String... messages){
-		for(String message : messages){
+	public void newChatMessage(String message){
 			messageDisplay.appendText(message + '\n');
-		}
 	}
 }

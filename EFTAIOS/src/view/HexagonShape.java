@@ -2,6 +2,7 @@ package view;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.StrokeType;
 import map.MapNode;
 import map.NodeType;
 import model.GameClient;
@@ -19,12 +20,16 @@ import model.GameClientController;
  * Huge thanks to Tristan for helping me debug my geometry calculations!
  * */
 public class HexagonShape extends Polygon{
+	private static final Color DARKESTGREY = Color.rgb(100, 100, 100);
+	
 	String coordinate;
 	
 	public HexagonShape(double xCoordinate, double yCoordinate, double size, String coordinateName, GameClientController client){
 		super(calculateCoordinates(xCoordinate, yCoordinate, size));
+		
 		setFill(Color.WHITE);
-		setStroke(Color.BLACK);
+		setDefaultStroke();
+		
 		coordinate = coordinateName;
 		setOnMouseClicked(e -> client.mapNodeSelected(MapNode.get(coordinate)));
 	}
@@ -38,7 +43,7 @@ public class HexagonShape extends Polygon{
 			setFill(Color.PINK);
 			break;
 		case DANGEROUS:
-			setFill(Color.GRAY);
+			setFill(Color.SILVER);
 			break;
 		case SECURE:
 			setFill(Color.WHITE);
@@ -47,6 +52,22 @@ public class HexagonShape extends Polygon{
 			setFill(Color.GREEN);
 			break;
 		}
+	}
+	
+	public void setDefaultStroke(){
+		setStroke(DARKESTGREY);
+		setStrokeWidth(2.0);
+		setStrokeType(StrokeType.CENTERED);
+	}
+	
+	public void setSelectedStroke(){
+		setStroke(Color.ORANGE);
+		setStrokeWidth(3.0);
+		setStrokeType(StrokeType.INSIDE);
+	}
+	
+	public boolean isSelectedStroke(){
+		return getStroke().equals(Color.ORANGE) && getStrokeType().equals(StrokeType.INSIDE) && getStrokeWidth() == 3.0;
 	}
 	
 	/**
