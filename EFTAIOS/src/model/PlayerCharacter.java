@@ -1,5 +1,4 @@
 package model;
-import java.util.LinkedList;
 import java.util.Scanner;
 
 import map.MapNode;
@@ -10,7 +9,6 @@ public class PlayerCharacter{
     private CharacterType aType;
     private boolean dead;
     private boolean escaped;
-    public static LinkedList<PlayerCharacter> gameCharacters = new LinkedList();
 
 
     public static void main(String[] args){
@@ -34,6 +32,7 @@ public class PlayerCharacter{
     	return currentPosition;
     }
     
+    /*
     public void attack(){
         if(aType == CharacterType.HUMAN){
             //humans can't attack
@@ -48,6 +47,7 @@ public class PlayerCharacter{
             }
         }
     }
+    */
    
     private void handleCard(DangerousSectorCard pCard){
         if(pCard.getType() == CardType.SILENCE){

@@ -29,7 +29,7 @@ public class MapConfiguration implements Serializable{
 	
 	
 	public static void main(String[] args){
-		createMapConfigFromFile("src/resources/galilei.txt", "src/resources/galilei.ser");
+		createMapConfigFromFile("src/resources/fermi.txt", "src/resources/fermi.ser");
 	}
 	
 	public NodeType getNodeType(String s){

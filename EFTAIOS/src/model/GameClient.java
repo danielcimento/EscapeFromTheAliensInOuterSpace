@@ -1,5 +1,9 @@
 package model;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.ArrayList;
 
 import map.MapNode;
@@ -11,8 +15,9 @@ import view.MovementListener;
 public class GameClient implements GameEngineListener, GameClientController{
 	//Model Data
 	private Player localPlayer;
-	private GameEngineController engine; //TODO: Figure out what to do with the creation of the game engine controller
-	private GameEngineView view;
+	private GameEngineView view = null;
+	private String serverName;
+	private int port;
 	
 	private ArrayList<ChatMessage> receivedMessages = new ArrayList<>();
 	
@@ -21,19 +26,43 @@ public class GameClient implements GameEngineListener, GameClientController{
 	private ArrayList<GameListener> gameListeners = new ArrayList<>();
 	private ArrayList<MovementListener> movementListeners = new ArrayList<>();
 	
-	public GameClient(Player p, GameEngine e){
+	public GameClient(Player p){
 		localPlayer = p;
-		engine = e;
-		view = e;
-		e.addGameEngineListener(this);
 	}
 	
 	//this method will be used once networking is established to pull from the model
-	public void pullStateFromEngine(){
-		for(ChatMessage msg : engine.getMessagesAfter(receivedMessages.get(receivedMessages.size() - 1))){
+	public GameEngine pullStateFromEngine(){
+		try{
+			Socket clientConnection = new Socket(serverName, port);
+			ObjectInputStream serverIn = new ObjectInputStream(clientConnection.getInputStream());
+			Object serverOutput = serverIn.readObject();
+			GameEngine eng = null;
+			
+			if(serverOutput instanceof GameEngine){
+				eng = (GameEngine)(serverOutput);
+			}
+			
+			serverIn.close();
+			clientConnection.close();
+			
+			return eng;
+		}catch (IOException e){
+			//if there is an exception we'll just wait until next pull.
+		}catch (ClassNotFoundException e){
+			throw new RuntimeException("Class not found!", e);
+		}
+		
+		return null;
+	}
+	
+	public void pullChatMessages(){
+		GameEngine eng = pullStateFromEngine();
+		for(ChatMessage msg : eng.getMessagesAfter(receivedMessages.get(receivedMessages.size() - 1))){
 			receivedMessages.add(msg);
 		}
 	}
+
+
 	
 	//Observer Methods
 	@Override
@@ -59,7 +88,17 @@ public class GameClient implements GameEngineListener, GameClientController{
 	public void processMessage(String message){
 		message = getUsername() + ": " + message;
 		ChatMessage msg = new ChatMessage(message, localPlayer);
-		engine.addMessage(msg);
+		
+		try{
+			Socket clientConnection = new Socket(serverName, port);
+			ObjectOutputStream out = new ObjectOutputStream(clientConnection.getOutputStream());
+			out.writeObject(msg);
+			out.close();
+			clientConnection.close();
+		}catch (IOException e){
+			//I'm really not 100% sure what I should best do in this case, as
+			//a message to the server was lost.
+		}
 	}
 	
 	public void mapNodeSelected(MapNode m){

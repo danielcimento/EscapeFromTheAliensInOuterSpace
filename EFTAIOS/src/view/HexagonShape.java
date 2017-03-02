@@ -5,7 +5,6 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeType;
 import map.MapNode;
 import map.NodeType;
-import model.GameClient;
 import model.GameClientController;
 
 
@@ -50,6 +49,9 @@ public class HexagonShape extends Polygon{
 			break;
 		case ESCAPE_HATCH:
 			setFill(Color.GREEN);
+			break;
+		default:
+			setFill(Color.WHITE);
 			break;
 		}
 	}

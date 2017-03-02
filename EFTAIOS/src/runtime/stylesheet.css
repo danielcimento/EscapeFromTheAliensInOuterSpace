@@ -1,0 +1,5 @@
+.game-window {
+	-fx-background-image: url("background.PNG");
+	-fx-background-size: 109px 109px;
+	-fx-background-repeat: repeat;
+}

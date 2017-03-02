@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import map.MapNode;
-import view.ChatListener;
 
 public class GameEngine implements GameEngineView, GameEngineController {
 	private ArrayList<PlayerCharacter> characters = new ArrayList<>();
@@ -16,10 +15,19 @@ public class GameEngine implements GameEngineView, GameEngineController {
 	@Override
     public void addMessage(ChatMessage msg){
     	messages.add(msg);
+    	
+    	/*
+    	 * To add the network code, we need to remove game engine listeners and
+    	 * have the clients pull the information they need from the server's instance
     	for(GameEngineListener gL : gameEngineListeners){
     		gL.newChatMessage(msg);
     	}
+    	*/
     }
+	
+	public void addAction(Action act){
+		actionHistory.add(act);
+	}
     
 	public MapNode getMapNode(String id){
 		return MapNode.get(id);
