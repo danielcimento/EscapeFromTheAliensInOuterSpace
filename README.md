@@ -1,9 +1,13 @@
 # EscapeFromTheAliensInOuterSpace
 
 Escape from the Aliens in Outer Space is a multiplayer board game, in which all players have a hidden identity (alien or human), and are tasked with navigating secretly throughout a game board. The humans are trying to get to an escape pod within 40 turns, and the aliens are trying to kill the humans before they can do so.
+
 To make matters complex, however, players don't know the exact locations of other players on the game board. Only when a player steps in a dangerous sector is there any revealed information. When a player steps in a dangerous sector, he or she draws a card from a deck, and either calls out "Silence in all sectors" or "Noise in sector ##".
+
 However, in the interest of deception, some cards force players to truthfully state their current location, whereas some cards allow the player to lie and state any location. This involves clever decision making and critical bluffing. If the player gives out locations that are nonsensical compared to previous calls, it may tip off to the others that the call is false. A well played bluff usually involves stating a location that's realistically close to their current location, but far enough away that it creates a false trail.
+
 When an alien believes to have found a human, they may declare an attack. An attack instantly kills all other players who are in the same sector as the alien. However, this may include aliens as well, so hunting in too close a pack, or putting on a false charade as a human can be just as dangerous as it is clever.
+
 Players win once their human reaches an escape pod, or if the player is an alien, when all humans are dead or 40 turns have passed.
 
 # The Code
