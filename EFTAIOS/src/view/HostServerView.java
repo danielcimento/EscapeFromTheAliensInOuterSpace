@@ -1,5 +1,8 @@
 package view;
 
+import java.net.Inet4Address;
+import java.net.UnknownHostException;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
@@ -10,8 +13,8 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
-import net.EFTAIOSServer;
-import runtime.EscapeFromTheAliensInOuterSpace;
+import net.MultithreadedServer;
+import main.EscapeFromTheAliensInOuterSpace;
 
 public class HostServerView extends Tab {
 	private TextField username;
@@ -61,12 +64,21 @@ public class HostServerView extends Tab {
 		try{
 			portNumber = Integer.parseInt(portNumberText);
 		}catch (NumberFormatException e){
+			e.printStackTrace();
 			//this should never really happen except for really big ints i guess...
+			//TODO: Figure out better input validation before declaring the project finished.
 		}
-		EFTAIOSServer.hostNewServer(portNumber);
+		MultithreadedServer.hostNewServer(portNumber);
 		
-		new Thread(EFTAIOSServer.getInstance()).start();
-		EscapeFromTheAliensInOuterSpace.createGameClient();
+		new Thread(MultithreadedServer.getInstance()).start();
+		String localHost = "localhost";
+		try {
+			localHost = Inet4Address.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		EscapeFromTheAliensInOuterSpace.createGameClient(localHost, portNumber, username.getText());
 	}
 }
 	

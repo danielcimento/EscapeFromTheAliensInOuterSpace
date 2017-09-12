@@ -10,25 +10,29 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
-import runtime.EscapeFromTheAliensInOuterSpace;
+import main.EscapeFromTheAliensInOuterSpace;
 
 public class JoinServerView extends Tab{
+	private TextField username;
+	private TextField serverAddress;
+	private TextField port;
+	
 	public JoinServerView(){
 		super();
 		this.setText("Join a Server");
 		this.setClosable(false);
 		
 		Label usernameLabel = new Label("Username: ");
-		TextField username = new TextField();
+		username = new TextField();
 		username.setTooltip(new Tooltip("This will be your display name during the game"));
 			
 		Label serverAddressLabel = new Label("Server Address: ");
-		TextField serverAddress = new TextField();
+		serverAddress = new TextField();
 		serverAddress.setTooltip(new Tooltip("The IP Address of the server you wish to connect to.\nDon't know it?\nAsk the host!"));
 
 		
 		Label portLabel = new Label("Port: ");
-		TextField port = new TextField();
+		port = new TextField();
 		port.textProperty().addListener(new ChangeListener<String>(){
 			@Override
 	        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -44,7 +48,7 @@ public class JoinServerView extends Tab{
 			
 
 		Button joinButton = new Button("Join");
-		joinButton.setOnAction(e -> EscapeFromTheAliensInOuterSpace.createGameClient());
+		joinButton.setOnAction(e -> joinServer());
 
 		GridPane frame = new GridPane();
 		frame.setAlignment(Pos.CENTER);
@@ -59,5 +63,18 @@ public class JoinServerView extends Tab{
 		frame.add(joinButton, 0, 3, 2, 1);
 		GridPane.setHalignment(joinButton, HPos.CENTER);
 		this.setContent(frame);
+	}
+	
+	public void joinServer(){
+		String serverAddressText = serverAddress.getText();
+		String portNumberText = port.getText();
+		int portNumber = 6789;
+		try{
+			 portNumber = Integer.parseInt(portNumberText);
+		}catch(NumberFormatException e){
+			//TODO: Create better input validation	
+		}
+		
+		EscapeFromTheAliensInOuterSpace.createGameClient(serverAddressText, portNumber, username.getText());
 	}
 }

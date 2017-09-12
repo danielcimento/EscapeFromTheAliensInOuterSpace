@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.lang.reflect.Method;
 
+import model.cards.DangerousSectorCard;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -7,8 +7,7 @@ import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import model.GameClient;
-import model.GameClientController;
+import model.engine.GameClientController;
 
 public class SocialView extends VBox implements ChatListener{
 	private static final int MARGIN_OUTER = 10;

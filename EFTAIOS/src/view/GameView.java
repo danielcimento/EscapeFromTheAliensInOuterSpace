@@ -1,16 +1,12 @@
 package view;
 
 import javafx.geometry.Insets;
-import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import model.GameClient;
-import model.GameEngineListener;
-import model.GameListener;
+import model.engine.GameClient;
+import model.engine.GameListener;
 
 public class GameView extends VBox implements GameListener{
 	private static final int MARGIN_OUTER = 10;
@@ -27,11 +23,11 @@ public class GameView extends VBox implements GameListener{
 		this.setMinWidth(MAP_WIDTH);
 		aClient = pClient;
 		
-		//Label for the map
+		//Label for the model.map
 		Label mapLabel = new Label("Game Map");
 		this.getChildren().add(mapLabel);
 		
-		//map
+		//model.map
 		AnchorPane mapGroup = new AnchorPane();
 		mapGroup.minHeight(MAP_WIDTH);
 		mapGroup.minWidth(MAP_HEIGHT);

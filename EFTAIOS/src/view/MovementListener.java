@@ -1,5 +1,5 @@
 package view;
-import map.MapNode;
+import model.map.MapNode;
 
 public interface MovementListener {
 	public void updateLocalPlayerLocation(MapNode m);
