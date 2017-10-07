@@ -8,7 +8,7 @@ import javafx.stage.Stage
 
 import model.map._
 import model.player.PlayerCharacter
-import net.GameClient
+import net.{GameClient, GameServer}
 import view.GameView
 import view.HostServerView
 import view.JoinServerView
@@ -41,7 +41,8 @@ object EscapeFromTheAliensInOuterSpace {
     portNumber: Int,
     primaryStage: Stage
   ): Unit = {
-
+    // TODO: Actually create the server!
+    GameServer.createServer(portNumber)
 
     createGameClient(serverAddress, portNumber, primaryStage)
   }
