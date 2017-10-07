@@ -17,6 +17,7 @@ import view.MovementListener;
 
 //The Game Client has an interesting position of being both observable and an observer.
 
+@Deprecated
 public class GameClient implements GameEngineListener, GameClientController, Runnable{
 	//Model Data
 	private Player localPlayer;

@@ -3,6 +3,7 @@ package net;
 import java.io.IOException;
 import java.net.Socket;
 
+@Deprecated
 public class ThreadTuple implements Runnable{
 	private Socket aClientSocket;
 	private ServerReadThread firstTask;

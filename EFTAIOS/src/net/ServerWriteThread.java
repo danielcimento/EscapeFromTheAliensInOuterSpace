@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+@Deprecated
 public class ServerWriteThread implements Runnable {
 
 	private Socket aClientSocket;

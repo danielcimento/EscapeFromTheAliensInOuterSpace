@@ -7,10 +7,8 @@ import javafx.scene.layout.HBox
 import javafx.stage.Stage
 
 import model.map._
-import model.CharacterType
-import model.Player
-import model.engine.GameClient
 import model.player.PlayerCharacter
+import net.GameClient
 import view.GameView
 import view.HostServerView
 import view.JoinServerView
@@ -31,14 +29,10 @@ object EscapeFromTheAliensInOuterSpace {
   def createGameClient(
     serverAddress: String,
     portNumber: Int,
-    username: String,
-    primaryStage: Stage): GameClient = {
+    primaryStage: Stage) = {
       primaryStage.hide()
-      val client = new GameClient(initializeLocalPlayer(username), serverAddress, portNumber)
-      new Thread(client).start()
-      primaryStage.setScene(renderGameWindow(client))
+      primaryStage.setScene(GameClient.createGameClient(serverAddress, portNumber))
       primaryStage.show()
-      client
   }
 
   def renderConnectToServerWindow: Scene = {
@@ -48,24 +42,11 @@ object EscapeFromTheAliensInOuterSpace {
     scene
   }
 
-  def renderGameWindow(client: GameClient): Scene = {
-    val root: HBox = new HBox
-    //MapConfiguration cfg = MapConfiguration.loadFromFile("src/main.resources/fermi.ser");
-    //MapConfiguration cfg = MapConfiguration.loadFromFile("src/main.resources/galilei.ser");
-    val cfg: MapConfiguration = MapConfiguration.readConfigurationFromFile(classOf[EscapeFromTheAliensInOuterSpace].getResourceAsStream("resources/galilei.ser"))
-    GameMap(cfg)
-    root.getChildren.add(new GameView(client))
-    root.getChildren.add(new SocialView(client))
-    val scene: Scene = new Scene(root, WIDTH, HEIGHT)
-    scene.getStylesheets.add(classOf[EscapeFromTheAliensInOuterSpace].getResource("resources/stylesheet.css").toExternalForm)
-    scene
-  }
-
-  private def initializeLocalPlayer(username: String): Player = {
-    //TODO: Change the way that characters are created (probably more beneficial once the game lobby is established)
-    val pc: PlayerCharacter = new PlayerCharacter(CharacterType.ALIEN, MapNode.get("A03"))
-    new Player(pc, username)
-  }
+//  private def initializeLocalPlayer(username: String): Player = {
+//    //TODO: Change the way that characters are created (probably more beneficial once the game lobby is established)
+//    val pc: PlayerCharacter = new PlayerCharacter(CharacterType.ALIEN, MapNode.get("A03"))
+//    new Player(pc, username)
+//  }
 }
 
 class EscapeFromTheAliensInOuterSpace extends Application {

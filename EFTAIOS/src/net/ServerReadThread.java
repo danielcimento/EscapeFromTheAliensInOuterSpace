@@ -9,6 +9,8 @@ import model.actions.Action;
 import model.actions.ChatMessage;
 import model.player.PlayerCharacter;
 
+
+@Deprecated
 public class ServerReadThread implements Runnable {
 
 	private Socket aClientSocket;

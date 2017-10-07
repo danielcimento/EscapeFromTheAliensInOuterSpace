@@ -4,7 +4,8 @@ import javafx.scene.paint.Color
 import javafx.scene.shape.Polygon
 import javafx.scene.shape.StrokeType
 
-import model.engine.GameClientController
+import model.actions.MoveAction
+import model.engine.{ActionListener, GameClientController}
 import model.map._
 
 /* Mathematics of Hexagons (for personal reference). When creating a hexagon centered at x, y with a distance of
@@ -57,20 +58,20 @@ object HexagonShape {
   * @param yCoordinate The center vertical coordinate of the hexagon in the cartesian plane
   * @param size The "radius" of the hexagon, measured as the circle which circumscribes the hexagon
   * @param mapNode The model.map's node which this hexagon is meant to visually represent
-  * @param client The controller layer to allow callbacks on click
+  * @param actionListener The controller layer to allow callbacks on click
   */
 class HexagonShape(
   val xCoordinate: Double,
   val yCoordinate: Double,
   val size: Double,
   val mapNode: MapNode,
-  val client: GameClientController
+  val actionListener: ActionListener
 ) extends Polygon(HexagonShape.calculateCoordinates(xCoordinate, yCoordinate, size): _*) {
   // Initialization Code
   {
     setFill(getHexColor(mapNode.nodeType))
     setDefaultStroke()
-    setOnMouseClicked(e => client.mapNodeSelected(mapNode))
+    setOnMouseClicked(e => actionListener.receiveAction(MoveAction(mapNode.name)))
   }
 
   private def getHexColor(t: NodeType): Color = {

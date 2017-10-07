@@ -7,22 +7,27 @@ import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import model.actions.ChatAction;
+import model.actions.ChatMessage;
+import model.engine.ActionListener;
 import model.engine.GameClientController;
+import model.engine.GameListener;
+import net.GameClientHandler;
 
-public class SocialView extends VBox implements ChatListener{
+public class SocialView extends VBox implements GameListener {
 	private static final int MARGIN_OUTER = 10;
 	private static final int SOCIAL_VIEW_WIDTH = 300;
 	private static final int MESSAGE_DISPLAY_HEIGHT = 700;
 	private static final int PLAYERS_LIST_HEIGHT = 180;
-	
-	private GameClientController client;
+
 	private TextField messageArea;
 	private TextArea messageDisplay;
+	private ActionListener actionListener;
 	
-	public SocialView(GameClientController pClient){
+	public SocialView(ActionListener actionListener){
 		this.setPadding(new Insets(MARGIN_OUTER));
-		client = pClient;
-		
+		this.actionListener = actionListener;
+
 		//Text field for sending messages
 		messageArea = new TextField();
 		messageArea.setPromptText("Type chat messages here");
@@ -55,18 +60,18 @@ public class SocialView extends VBox implements ChatListener{
 		
 		setSpacing(20);
 		getChildren().addAll(playersLabel, playersList, chatLabel, chatAndMessages);
-		
-		client.registerChatListener(this);
 	}
 	
 	private void sendMessage(){
 		String message = messageArea.getText();
 		messageArea.setText("");
-		client.processMessage(message);
+		// TODO: Figure out what the hell is going on here...
+		actionListener.receiveAction(ChatAction(new ChatMessage(message)));
 	}
-	
+
 	@Override
-	public void newChatMessage(String message){
-			messageDisplay.appendText(message + '\n');
+	public void gameStateChanged(String s) {
+		// TODO: Replace with extracting messages from game state and appending to message display
+		messageDisplay.appendText("Game state has been updated!" + '\n');
 	}
 }

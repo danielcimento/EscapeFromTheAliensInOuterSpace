@@ -1,4 +1,6 @@
 scalaVersion := "2.12.2"
+libraryDependencies += "com.typesafe.play" %% "play" % "2.6.5"
 libraryDependencies += "org.scalaz" %% "scalaz-core" % "7.2.15"
 libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.1"
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.1" % "test"
+libraryDependencies += "io.netty" % "netty-all" % "4.1.16.Final"

@@ -7,7 +7,7 @@ import javafx.scene.Node
 import javafx.scene.text.Text
 
 import model.map._
-import model.engine.{GameClientController, GameEngine}
+import model.engine.{ActionListener, GameClientController, GameEngine}
 
 /*for mathematics' sake, if we imagine a square grid of hexagons with size n,
 * then the center of the first hexagon is at (n, sqrt(3)*n/2)
@@ -27,8 +27,8 @@ class HexagonGrid(
   val topLeftX: Double,
   val topLeftY: Double,
   val size: Double,
-  val client: GameClientController,
-  val engine: GameEngine
+  val actionListener: ActionListener,
+  val gameMap: GameMap
 ) extends Group() with MovementListener {
 
   // In a name with format "c##", the i co-ordinate is c - 'A'. The j co-ordinate is ## - 1
@@ -42,7 +42,7 @@ class HexagonGrid(
   {
     val centerXOfFirstHex: Double = size
     val centerYOfFirstHex: Double = Math.sqrt(3) * size / 2
-    engine.gameMap.findTiles(_ => true).foreach { tile =>
+    gameMap.findTiles(_ => true).foreach { tile =>
       val (i, j) = getRelativePositionFromName(tile.name)
 
       //the if we are on the nth horizontal hexagon, and
@@ -58,7 +58,7 @@ class HexagonGrid(
 
       val label: Text = new Text(currentXCoordinate - (size/3), currentYCoordinate+(size/5), tile.name)
       label.setMouseTransparent(true)
-      val hex: HexagonShape = new HexagonShape(currentXCoordinate, currentYCoordinate, size, tile, client)
+      val hex: HexagonShape = new HexagonShape(currentXCoordinate, currentYCoordinate, size, tile, actionListener)
       // We don't want to render tiles that are non-interactive. Special tiles don't have a label on them.
       thisNodeType match {
         case Blocked =>

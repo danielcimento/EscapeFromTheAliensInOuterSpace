@@ -8,7 +8,7 @@ import model.Player
 /**
   * Created by daniel on 9/8/2017.
   */
-class ChatAction(chatMessage: ChatMessage) extends Action {
+case class ChatAction(chatMessage: ChatMessage) extends Action {
   override def perform(gameEngine: GameEngine) = ???
 
   override def isVisibleTo(player: Player) = ???

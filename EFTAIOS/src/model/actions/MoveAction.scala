@@ -3,12 +3,12 @@ package model.actions
 import java.util.UUID
 
 import model.engine.GameEngine
-import model.player.PlayerCharacter
+import model.player.{Alien, Alive, PlayerCharacter}
 
 /**
   * Created by daniel on 9/8/2017.
   */
-class MoveAction(performingPlayer: PlayerCharacter, destinationNode: String) extends Action {
+case class MoveAction(destinationNode: String) extends Action {
   override val uuid: UUID = UUID.randomUUID()
 
   // Previously this was set to always return true with justification: All moves are visible to all players
@@ -18,7 +18,12 @@ class MoveAction(performingPlayer: PlayerCharacter, destinationNode: String) ext
     true
   }
 
+  // TODO: Add some parameterized context for the action which is executed. This will allow us to identify
+  // the player to determine which character to move
   override def perform(gameEngine: GameEngine) = {
+    // TODO: REMOVE THIS
+    val performingPlayer: PlayerCharacter = new PlayerCharacter(Alien, Alive, "foo")
+
     // TODO: Write in a more type safe manner
     val startingPosition = gameEngine.gameMap findTiles (_.containsPlayer(performingPlayer)) head
     val endPosition = gameEngine.gameMap findTiles (_.name == destinationNode) head
