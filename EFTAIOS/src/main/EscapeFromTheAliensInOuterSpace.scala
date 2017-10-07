@@ -29,15 +29,26 @@ object EscapeFromTheAliensInOuterSpace {
   def createGameClient(
     serverAddress: String,
     portNumber: Int,
-    primaryStage: Stage) = {
+    primaryStage: Stage
+  ): Unit = {
       primaryStage.hide()
       primaryStage.setScene(GameClient.createGameClient(serverAddress, portNumber))
       primaryStage.show()
   }
 
-  def renderConnectToServerWindow: Scene = {
+  def createGameServer(
+    serverAddress: String,
+    portNumber: Int,
+    primaryStage: Stage
+  ): Unit = {
+
+
+    createGameClient(serverAddress, portNumber, primaryStage)
+  }
+
+  def renderConnectToServerWindow(stage: Stage): Scene = {
     val tabPane: TabPane = new TabPane
-    tabPane.getTabs.addAll(new JoinServerView, new HostServerView)
+    tabPane.getTabs.addAll(new JoinServerView(stage), new HostServerView(stage))
     val scene: Scene = new Scene(tabPane, INTRO_FRAME_WIDTH, INTRO_FRAME_HEIGHT)
     scene
   }
@@ -53,7 +64,7 @@ class EscapeFromTheAliensInOuterSpace extends Application {
   def start(stage: Stage) {
     stage.setTitle(EscapeFromTheAliensInOuterSpace.TITLE + " - " + EscapeFromTheAliensInOuterSpace.VERSION_NUMBER)
     stage.setResizable(false)
-    stage.setScene(EscapeFromTheAliensInOuterSpace.renderConnectToServerWindow)
+    stage.setScene(EscapeFromTheAliensInOuterSpace.renderConnectToServerWindow(stage))
     stage.setOnCloseRequest(e => sys.exit(0))
     stage.show()
   }

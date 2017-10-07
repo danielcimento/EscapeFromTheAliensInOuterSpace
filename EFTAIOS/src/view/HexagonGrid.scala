@@ -7,7 +7,7 @@ import javafx.scene.Node
 import javafx.scene.text.Text
 
 import model.map._
-import model.engine.{ActionListener, GameClientController, GameEngine}
+import model.engine.{ActionListener, GameEngine}
 
 /*for mathematics' sake, if we imagine a square grid of hexagons with size n,
 * then the center of the first hexagon is at (n, sqrt(3)*n/2)
@@ -29,7 +29,7 @@ class HexagonGrid(
   val size: Double,
   val actionListener: ActionListener,
   val gameMap: GameMap
-) extends Group() with MovementListener {
+) extends Group() {
 
   // In a name with format "c##", the i co-ordinate is c - 'A'. The j co-ordinate is ## - 1
   private def getRelativePositionFromName(name: String): (Int, Int) = {
@@ -80,4 +80,6 @@ class HexagonGrid(
       case newHex: HexagonShape if m.name == newHex.mapNode.name => newHex.setSelectedStroke()
     }
   }
+
+  // TODO: Add listener for changing active tile location
 }

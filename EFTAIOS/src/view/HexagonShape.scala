@@ -5,7 +5,7 @@ import javafx.scene.shape.Polygon
 import javafx.scene.shape.StrokeType
 
 import model.actions.MoveAction
-import model.engine.{ActionListener, GameClientController}
+import model.engine.ActionListener
 import model.map._
 
 /* Mathematics of Hexagons (for personal reference). When creating a hexagon centered at x, y with a distance of

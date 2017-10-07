@@ -1,6 +1,5 @@
 package model.actions;
 
-import model.Player;
 import model.player.PlayerCharacter;
 
 import java.io.Serializable;
@@ -12,6 +11,9 @@ import java.util.Date;
  * and a hashCode for faster checking to ensure that no duplicates are loaded by
  * listeners
  */
+
+// TODO: Replace with better Scala code, or delete entirely
+@Deprecated
 public class ChatMessage implements Serializable {
 	/**
 	 * 
