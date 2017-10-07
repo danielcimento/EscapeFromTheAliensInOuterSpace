@@ -1,6 +1,6 @@
 package model.map
 
-sealed trait NodeType
+sealed trait NodeType extends Serializable
 
 object Blocked extends NodeType
 object Secure extends NodeType

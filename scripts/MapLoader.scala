@@ -1,5 +1,4 @@
-package main
-
+import main.EscapeFromTheAliensInOuterSpace
 import model.map.MapConfiguration
 
 /**
@@ -7,7 +6,7 @@ import model.map.MapConfiguration
   */
 object MapLoader {
   def main(args: Array[String]) {
-    MapConfiguration.createMapConfigFromFile(classOf[MapConfiguration].getResourceAsStream("resources/galilei.txt"), "galilei.ser")
-    MapConfiguration.createMapConfigFromFile(classOf[MapConfiguration].getResourceAsStream("resources/fermi.txt"), "fermi.ser")
+    MapConfiguration.createMapConfigFromFile(classOf[EscapeFromTheAliensInOuterSpace].getResourceAsStream("resources/galilei.txt"), "galilei.ser")
+    MapConfiguration.createMapConfigFromFile(classOf[EscapeFromTheAliensInOuterSpace].getResourceAsStream("resources/fermi.txt"), "fermi.ser")
   }
 }
