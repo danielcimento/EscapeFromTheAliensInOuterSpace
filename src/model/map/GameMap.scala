@@ -2,6 +2,8 @@ package model.map
 
 import model.player.PlayerCharacter
 
+import scala.collection.immutable.IndexedSeq
+import scala.collection.immutable.NumericRange.Inclusive
 import scalaz.syntax.std.boolean._
 import scala.languageFeature.implicitConversions
 
@@ -22,8 +24,8 @@ class GameMap(nodeGraph: Graph[MapNode]) {
 }
 
 object GameMap {
-  val nodePrefixes = 'A' to 'W'
-  val nodeSuffixes = (1 to 14) map ("%02d".format(_))
+  val nodePrefixes: Inclusive[Char] = 'A' to 'W'
+  val nodeSuffixes: IndexedSeq[String] = (1 to 14) map ("%02d".format(_))
 
   private def nextSuffix(suffix: String) = "%02d".format(suffix.toInt + 1)
   private def isLast(prefix: Char) = prefix == 'W'
@@ -76,27 +78,29 @@ object GameMap {
       (for(prefix <- nodePrefixes; suffix <- nodeSuffixes) yield {
         val currNode = nodeMap(prefix + suffix)
 
+
         val lowerNodeEdge = !isLast(suffix) option {
-          Edge(currNode, nodeMap(prefix + nextSuffix(suffix)))
+          Edge(currNode, nodeMap(s"$prefix${nextSuffix(suffix)}"))
         }
         val lowerLeftNodeEdge = !isFirst(prefix) option {
           if(isHigherColumn(prefix)){
-            Some(Edge(currNode, nodeMap((prefix - 1) + suffix)))
+            Some(Edge(currNode, nodeMap(s"${(prefix - 1).toChar}$suffix")))
           } else if(!isLast(suffix)){
-            Some(Edge(currNode, nodeMap((prefix - 1) + nextSuffix(suffix))))
+            Some(Edge(currNode, nodeMap(s"${(prefix - 1).toChar}${nextSuffix(suffix)}")))
           } else {
             None
           }
-        } map(_.get)
+        } flatMap identity
+        // For some reason, using flatten converts the option to an iterable and causes things to break
         val lowerRightNodeEdge = !isLast(prefix) option {
           if(isHigherColumn(prefix)){
-            Some(Edge(currNode, nodeMap((prefix + 1) + suffix)))
+            Some(Edge(currNode, nodeMap(s"${(prefix + 1).toChar}$suffix")))
           } else if(!isLast(suffix)) {
-            Some(Edge(currNode, nodeMap((prefix + 1) + nextSuffix(suffix))))
+            Some(Edge(currNode, nodeMap(s"${(prefix + 1).toChar}${nextSuffix(suffix)}")))
           } else {
             None
           }
-        } map(_.get)
+        } flatMap identity
         Set(lowerNodeEdge, lowerLeftNodeEdge, lowerRightNodeEdge).filter(_.isDefined).map(_.get)
       })(collection.breakOut)
 
@@ -106,6 +110,6 @@ object GameMap {
   def apply(cfg: MapConfiguration): GameMap = {
     val nodes = createAllNodes(cfg)
     val edges = createEdges(convertToMap(nodes))
-    new GameMap(new Graph(nodes, edges))
+    new GameMap(Graph(nodes, edges))
   }
 }
