@@ -22,3 +22,26 @@ Right now, I am trying to implement the networking code that will allow players 
 Once that is done, moving the current pieces of game logic, which currently sit in the model package, unused, into state information that the server will distribute and update will be the next task. Once the basic commands are set up, the game loop/turn structure will be the next step.
 
 After that point, extensibility and minor updates will be all that remains. I plan to more fully flesh out the features of the game, perhaps adding a more robust game lobby for players to connect to. Advanced settings, custom maps, and the additional rule variants that can be found in the board game are potential future extensions to the project, once the basic game has been implemented.
+
+# Update 2017/10/06
+
+In order to facilitate the networking aspect of the game, I consulted a lot of different networking frameworks. At first, my thought was to use a REST based framework (like Play), but that would end up requiring too much additional complexity and overhead with database calls and the like.
+
+Right now I'm trying to learn/use Netty to facilitate the networking. The current modus operandi is to rework the networking architecture as follows:
+
+The Client:
+    -Sends [Action]s to the server
+    -Receives [VisibleGameState]s from the server
+    -Registers its handler as a listener to the UI. When UI elements are interacted with, they will construct [Action]s and send them to the server.
+    -Register the UI as a listener to the handler. When the handler receives game state changes from the server, it will change the UI to reflect that.
+    -Note: Now, the role of generating the game UI is done completely in the Client construction, rather than the Main method. Obviously the Server will not need a UI.
+
+The Server:
+    -Sends [VisibleGameState]s to the clients
+    -Receives [Action]s from the clients.
+    -When it receives the [Action], it acknowledges the context of the channel that passed it. The server will maintain the relations between channels/players, so the server can determine whether the action was legal. If the action is legal, the server possibly updates its game state and pushes changes to the clients.
+    -For each connected channel, the server can deduce which player the user is and construct the [VisibleGameState] based on what the player is allowed to see.
+
+That's effectively the current state of the networking architecture. I'm also in the midst of a fairly wide scale Scala refactor, which I believe will make writing the code in the future a bit easier, so right now the code is definitely a mess. With a cross between adapting pre-existing code and throwing out old code if it isn't needed for the new networking paradigm, there are definitely a lot of files which will be deleted in the near future.
+
+I'm still eager to continue work on this project, but schoolwork and the like may keep me from devoting as much time as I'd like.
