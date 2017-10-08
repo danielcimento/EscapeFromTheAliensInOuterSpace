@@ -1,5 +1,3 @@
 package model.engine
 
-class VisibleGameState {
-
-}
+case class VisibleGameState(messages: List[String])

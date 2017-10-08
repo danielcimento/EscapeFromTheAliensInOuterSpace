@@ -32,7 +32,8 @@ object EscapeFromTheAliensInOuterSpace {
     primaryStage: Stage
   ): Unit = {
       primaryStage.hide()
-      primaryStage.setScene(GameClient.createGameClient(serverAddress, portNumber))
+      new Thread(() => {GameClient.createGameClient(serverAddress, portNumber)}).start()
+      primaryStage.setScene(GameClient.createScene())
       primaryStage.show()
   }
 

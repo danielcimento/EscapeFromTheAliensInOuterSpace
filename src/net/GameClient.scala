@@ -12,14 +12,43 @@ import io.netty.handler.codec.serialization.{ClassResolvers, ObjectDecoder, Obje
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory
 import io.netty.handler.ssl.{SslContext, SslContextBuilder}
 import main.EscapeFromTheAliensInOuterSpace
+import model.actions.{Action, QueryStateAction}
+import model.engine.ActionListener
 import model.map.{GameMap, MapConfiguration}
 import view.{GameView, SocialView}
 
-object GameClient {
+object GameClient extends ActionListener {
   val SSL: Boolean = System.getProperty("ssl") != null
+  val clientHandler: GameClientHandler = new GameClientHandler()
+  var channel: Option[Channel] = None
 
-  def createGameClient(host: String, port: Int): Scene = {
-    val clientHandler: GameClientHandler = new GameClientHandler()
+  override def receiveAction(action: Action): Unit = {
+    channel.get.writeAndFlush(action)
+  }
+
+  def createScene(): Scene = {
+    // Render UI
+    val root: HBox = new HBox
+    val cfg: MapConfiguration = MapConfiguration.readConfigurationFromFile(classOf[EscapeFromTheAliensInOuterSpace].getResourceAsStream("resources/galilei.ser"))
+    val gameMap: GameMap = GameMap(cfg)
+
+    val gameView: GameView = new GameView(this, gameMap)
+    val socialView: SocialView = new SocialView(this)
+
+    // Whenever we receive a new game state from the server, we need to pass it to the views so they can update
+    clientHandler.registerGameStateListener(gameView)
+    clientHandler.registerGameStateListener(socialView)
+
+    root.getChildren.add(gameView)
+    root.getChildren.add(socialView)
+
+    val scene: Scene = new Scene(root, EscapeFromTheAliensInOuterSpace.WIDTH, EscapeFromTheAliensInOuterSpace.HEIGHT)
+    scene.getStylesheets.add(classOf[EscapeFromTheAliensInOuterSpace].getResource("resources/stylesheet.css").toExternalForm)
+
+    scene
+  }
+
+  def createGameClient(host: String, port: Int): Unit = {
 
     val sslCtx: Option[SslContext] =
       if(SSL)
@@ -49,28 +78,14 @@ object GameClient {
           }
         })
 
-      val ch: Channel = bootstrap.connect(host, port).sync().channel()
+      channel = Some(bootstrap.connect(host, port).sync().channel())
 
-      // Render UI
-      val root: HBox = new HBox
-      val cfg: MapConfiguration = MapConfiguration.readConfigurationFromFile(classOf[EscapeFromTheAliensInOuterSpace].getResourceAsStream("resources/galilei.ser"))
-      val gameMap: GameMap = GameMap(cfg)
-
-      val gameView: GameView = new GameView(clientHandler, gameMap)
-      val socialView: SocialView = new SocialView(clientHandler)
-
-      // Whenever we receive a new game state from the server, we need to pass it to the views so they can update
-      clientHandler.registerGameStateListener(gameView)
-      clientHandler.registerGameStateListener(socialView)
-
-      root.getChildren.add(gameView)
-      root.getChildren.add(socialView)
-
-      val scene: Scene = new Scene(root, EscapeFromTheAliensInOuterSpace.WIDTH, EscapeFromTheAliensInOuterSpace.HEIGHT)
-      scene.getStylesheets.add(classOf[EscapeFromTheAliensInOuterSpace].getResource("resources/stylesheet.css").toExternalForm)
-      scene
-
-      // TODO: Continue to listen to server
+      while(true){
+        // TODO: This loop may be a bit unnecessary, as every time the state is changed, every listener gets notified anyway
+        // Maybe make the delay a bit longer to compensate for the redundancy
+        channel.get.writeAndFlush(QueryStateAction())
+        Thread.sleep(4000)
+      }
     } finally {
       group.shutdownGracefully()
     }

@@ -5,15 +5,14 @@ import model.actions.Action
 import model.engine.{ActionListener, VisibleGameState}
 import view.GameStateListener
 
-class GameClientHandler extends SimpleChannelInboundHandler[VisibleGameState] with ActionListener {
+class GameClientHandler extends SimpleChannelInboundHandler[VisibleGameState] {
+  var gameStateListeners: List[GameStateListener] = List()
+
   override def channelRead0(ctx: ChannelHandlerContext, msg: VisibleGameState): Unit = {
-    System.out.println(msg)
+    gameStateListeners.foreach(_.gameStateChanged(msg))
   }
 
-  def registerGameStateListener(gameStateListener: GameStateListener) = {
-    // TODO: Manage list of listeners and query on update
+  def registerGameStateListener(gameStateListener: GameStateListener): Unit = {
+    gameStateListeners = gameStateListener :: gameStateListeners
   }
-
-  // TODO: Handle receiving/sending actions to server
-  override def receiveAction(action: Action): Unit = ???
 }

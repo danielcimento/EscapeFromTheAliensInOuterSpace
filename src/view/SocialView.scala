@@ -17,7 +17,7 @@ class SocialView(actionListener: ActionListener) extends VBox with GameStateList
   messageArea.setOnAction(e => sendMessage())
 
   // Scroll pane with chat messages
-  private val chatScroll: ScrollPane = new ScrollPane
+//  private val chatScroll: ScrollPane = new ScrollPane
   private val messageDisplay: TextArea = new TextArea
   messageDisplay.setEditable(false)
   messageDisplay.setPrefSize(SocialView.SOCIAL_VIEW_WIDTH, SocialView.MESSAGE_DISPLAY_HEIGHT)
@@ -29,9 +29,9 @@ class SocialView(actionListener: ActionListener) extends VBox with GameStateList
   playersList.setPrefSize(SocialView.SOCIAL_VIEW_WIDTH, SocialView.PLAYERS_LIST_HEIGHT)
 
   // Setting scroll contents and settings
-  chatScroll.setContent(messageDisplay)
-  chatScroll.setPrefSize(SocialView.SOCIAL_VIEW_WIDTH, SocialView.MESSAGE_DISPLAY_HEIGHT)
-  chatScroll.setHbarPolicy(ScrollBarPolicy.NEVER)
+//  chatScroll.setContent(messageDisplay)
+//  chatScroll.setPrefSize(SocialView.SOCIAL_VIEW_WIDTH, SocialView.MESSAGE_DISPLAY_HEIGHT)
+//  chatScroll.setHbarPolicy(ScrollBarPolicy.NEVER)
 
   // Labels
   val playersLabel: Label = new Label("Players:")
@@ -39,7 +39,7 @@ class SocialView(actionListener: ActionListener) extends VBox with GameStateList
 
   // Containing VBox
   val chatAndMessages = new VBox
-  chatAndMessages.getChildren.addAll(chatScroll, messageArea)
+  chatAndMessages.getChildren.addAll(messageDisplay, messageArea)
   chatAndMessages.setSpacing(5)
   this.setSpacing(20)
   this.getChildren.addAll(playersLabel, playersList, chatLabel, chatAndMessages)
@@ -51,8 +51,11 @@ class SocialView(actionListener: ActionListener) extends VBox with GameStateList
     actionListener.receiveAction(ChatAction(message))
   }
 
-  // TODO: Replace with new messages
-  override def gameStateChanged(vgs: VisibleGameState): Unit = ???
+  // TODO: Look into ChatMessage so as to contain metadata for messages
+  // This way, two messages with the same text still get shown.
+  override def gameStateChanged(vgs: VisibleGameState): Unit = {
+    vgs.messages.foreach(msg => if(!messageDisplay.getText.contains(msg)) messageDisplay.appendText(msg + "\n"))
+  }
 }
 
 object SocialView {

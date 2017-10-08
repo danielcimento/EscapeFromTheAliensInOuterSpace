@@ -91,7 +91,7 @@ object GameMap {
             None
           }
         } flatMap identity
-        // For some reason, using flatten converts the option to an iterable and causes things to break
+        // For some reason, using flatten converts the option to an iterable and causes things to break wrt breakOut
         val lowerRightNodeEdge = !isLast(prefix) option {
           if(isHigherColumn(prefix)){
             Some(Edge(currNode, nodeMap(s"${(prefix + 1).toChar}$suffix")))
