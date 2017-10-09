@@ -2,12 +2,14 @@ package net
 
 import java.net.InetSocketAddress
 
+import io.netty.channel.ChannelHandler.Sharable
 import io.netty.channel.group.{ChannelGroup, ChannelGroupFuture, DefaultChannelGroup}
 import io.netty.channel.{ChannelHandlerContext, SimpleChannelInboundHandler}
 import io.netty.util.concurrent.GlobalEventExecutor
 import model.actions.{Action, ChatAction, QueryStateAction}
 import model.engine.{GameEngine, GameLobby, GameState, VisibleGameState}
 
+@Sharable
 class GameServerHandler extends SimpleChannelInboundHandler[Action] {
   // Keep track of the players who have connected to the server.
   val channelGroup: ChannelGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE)

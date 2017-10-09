@@ -13,6 +13,7 @@ import io.netty.handler.ssl.util.SelfSignedCertificate
 
 object GameServer {
   val SSL: Boolean = System.getProperty("ssl") != null
+  val serverHandler: GameServerHandler = new GameServerHandler()
 
   def createServer(port: Int): Unit = {
 
@@ -46,7 +47,7 @@ object GameServer {
                 p.addLast(
                   new ObjectEncoder(),
                   new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
-                  new GameServerHandler()
+                  serverHandler
                 )
               }
             })
