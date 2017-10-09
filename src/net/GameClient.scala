@@ -53,13 +53,11 @@ object GameClient extends ActionListener {
   }
 
   def createGameClient(host: String, port: Int): Unit = {
-
     val sslCtx: Option[SslContext] =
       if(SSL)
         Some(SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE).build())
       else
         None
-
     val group: EventLoopGroup = new NioEventLoopGroup()
     try {
       val bootstrap: Bootstrap = new Bootstrap()
@@ -73,7 +71,6 @@ object GameClient extends ActionListener {
               case Some(context) => p.addLast(context.newHandler(ch.alloc(), host, port))
               case None => // NOOP
             }
-
             p.addLast(
               new ObjectEncoder(),
               new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
@@ -81,12 +78,9 @@ object GameClient extends ActionListener {
             )
           }
         })
-
       channel = Some(bootstrap.connect(host, port).sync().channel())
-
       while(true){
-        // TODO: This loop may be a bit unnecessary, as every time the state is changed, every listener gets notified anyway
-        // Maybe make the delay a bit longer to compensate for the redundancy
+        // Continually query the server for the game state
         channel.get.writeAndFlush(QueryStateAction())
         Thread.sleep(4000)
       }

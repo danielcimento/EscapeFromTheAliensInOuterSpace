@@ -8,7 +8,6 @@ case class GameLobby(listOfPlayers: List[Player], listOfMessages: List[String]) 
   }
 
   def addMessage(message: String): GameLobby = {
-    System.out.println("Added message: " + listOfMessages.length)
     this.copy(listOfMessages = message :: listOfMessages)
   }
 

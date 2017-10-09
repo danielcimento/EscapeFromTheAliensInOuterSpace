@@ -16,9 +16,7 @@ object GameServer {
   val serverHandler: GameServerHandler = new GameServerHandler()
 
   def createServer(port: Int): Unit = {
-
     new Thread(() => {
-
         val sslCtx: Option[SslContext] =
           if(SSL) {
             val ssc: SelfSignedCertificate = new SelfSignedCertificate()
@@ -26,10 +24,8 @@ object GameServer {
           } else {
             None
           }
-
         val bossGroup: EventLoopGroup = new NioEventLoopGroup(1)
         val workerGroup: EventLoopGroup = new NioEventLoopGroup()
-
         try {
           val bootstrap: ServerBootstrap = new ServerBootstrap()
           bootstrap
@@ -43,21 +39,18 @@ object GameServer {
                   case Some(context) => p.addLast(context.newHandler(ch.alloc()))
                   case None => // NOOP
                 }
-
                 p.addLast(
-                  new ObjectEncoder(),
                   new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
+                  new ObjectEncoder(),
                   serverHandler
                 )
               }
             })
-
           bootstrap.bind(port).sync().channel().closeFuture().sync()
         } finally {
           bossGroup.shutdownGracefully()
           workerGroup.shutdownGracefully()
         }
-
       }).start()
   }
 

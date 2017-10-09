@@ -5,4 +5,4 @@ case class Player(
   hostAddress: String,
   role: Role,
   playerCharacter: Option[PlayerCharacter]
-)
+) extends Serializable
