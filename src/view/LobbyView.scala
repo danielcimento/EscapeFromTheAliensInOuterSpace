@@ -23,7 +23,7 @@ class LobbyView(actionListener: ActionListener) extends HBox with GameStateListe
         super.updateItem(item, empty)
         if(empty) {
           this.setText("")
-          this.addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, _.consume())
+          this.addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, {e: ContextMenuEvent => e.consume()})
         } else {
           this.setText(formatPlayerItem(item))
           this.setContextMenu(new PlayerListContextMenu(item, actionListener))
