@@ -19,17 +19,20 @@ class GameServerHandler extends SimpleChannelInboundHandler[Action] {
     channelGroup.add(ctx.channel())
   }
 
+  // TODO: Figure out why the server no longer sends back visible game state (or why the client doesn't process it)
   override def channelRead0(ctx: ChannelHandlerContext, msg: Action): Unit = {
     gameState = gameState.processAction(getHostname(ctx), msg)
-
     msg match {
-      case query: QueryStateAction => ctx.channel().writeAndFlush(gameState.generateVisibleGameState(getHostname(ctx)))
+      case query: QueryStateAction =>
+        System.out.println(getHostname(ctx))
+        ctx.channel().writeAndFlush(gameState.generateVisibleGameState(getHostname(ctx)))
       case _ =>
-        channelGroup.forEach(channel =>
+        channelGroup.forEach(channel => {
+          System.out.println(getHostname(channel))
           channel.writeAndFlush(
             gameState.generateVisibleGameState(getHostname(channel))
           )
-        )
+        })
     }
 
   }

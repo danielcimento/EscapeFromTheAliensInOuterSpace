@@ -8,6 +8,7 @@ case class GameLobby(listOfPlayers: List[Player], listOfMessages: List[String]) 
   }
 
   def addMessage(message: String): GameLobby = {
+    System.out.println("Added message: " + listOfMessages.length)
     this.copy(listOfMessages = message :: listOfMessages)
   }
 
@@ -21,6 +22,7 @@ case class GameLobby(listOfPlayers: List[Player], listOfMessages: List[String]) 
   }
 
   override def processAction(playerContext: String, action: Action): GameState = {
+
     action match {
       case ChatAction(msg) => this.addMessage(msg)
       case MoveAction(destinationNode) => this.addMessage(

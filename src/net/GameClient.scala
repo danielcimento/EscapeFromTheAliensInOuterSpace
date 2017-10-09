@@ -19,13 +19,11 @@ import model.map.{GameMap, MapConfiguration}
 import view.{GameView, SocialView}
 
 object GameClient extends ActionListener {
-
   val SSL: Boolean = System.getProperty("ssl") != null
   val clientHandler: GameClientHandler = new GameClientHandler()
   var channel: Option[Channel] = None
 
   override def receiveAction(action: Action): Unit = {
-
     channel.get.writeAndFlush(action)
   }
 
