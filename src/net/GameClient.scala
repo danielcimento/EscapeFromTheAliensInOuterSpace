@@ -2,6 +2,7 @@ package net
 
 import javafx.scene.Scene
 import javafx.scene.layout.HBox
+import javafx.stage.Stage
 
 import io.netty.channel.nio._
 import io.netty.bootstrap._
@@ -26,12 +27,15 @@ object GameClient extends ActionListener {
     channel.get.writeAndFlush(action)
   }
 
-  def createScene(): Scene = {
+  // TODO: Change this to render the LobbyView
+  // Stage will be used later so the LobbyView knows which stage to set as the GameView when it's done
+  def createScene(stage: Stage): Scene = {
     // Render UI
     val root: HBox = new HBox
+    // TODO: Move the entire map configuration handling to the server side. Clients should NEVER be allowed to have mismatching maps
     val cfg: MapConfiguration = MapConfiguration.readConfigurationFromFile(classOf[EscapeFromTheAliensInOuterSpace].getResourceAsStream("resources/galilei.ser"))
     val gameMap: GameMap = GameMap(cfg)
-
+    // TODO: Make the socialView a part of the GameView, instead of orthogonal to it.
     val gameView: GameView = new GameView(this, gameMap)
     val socialView: SocialView = new SocialView(this)
 

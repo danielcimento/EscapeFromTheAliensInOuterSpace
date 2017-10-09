@@ -1,3 +1,5 @@
 package model.engine
 
-case class VisibleGameState(messages: List[String])
+import model.player.Player
+
+case class VisibleGameState(gameStatus: GameStatus, messages: List[String], players: List[Player])
