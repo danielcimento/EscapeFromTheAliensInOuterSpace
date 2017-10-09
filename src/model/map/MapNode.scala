@@ -3,7 +3,7 @@ package model.map
 import model.player.PlayerCharacter
 
 
-case class MapNode(name: String, nodeType: NodeType, players: List[PlayerCharacter]) {
+case class MapNode(name: String, nodeType: NodeType, players: List[PlayerCharacter]) extends Serializable{
   def containsPlayer(player: PlayerCharacter): Boolean = {
     players.contains(player)
   }

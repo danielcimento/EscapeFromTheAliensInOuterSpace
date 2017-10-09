@@ -1,8 +1,9 @@
 package model.engine
 import model.actions.{Action, ChatAction, MoveAction, ReadyAction}
+import model.map.GameMap
 import model.player.{Participant, Player}
 
-case class GameLobby(listOfPlayers: List[Player], listOfMessages: List[String]) extends GameState {
+case class GameLobby(listOfPlayers: List[Player], listOfMessages: List[String], selectedMap: GameMap) extends GameState {
   override def addPlayer(username: String, hostName: String): GameLobby = {
     this.copy(listOfPlayers = Player(username, hostName, Participant, None) :: listOfPlayers)
   }
@@ -17,7 +18,7 @@ case class GameLobby(listOfPlayers: List[Player], listOfMessages: List[String]) 
   }
 
   override def generateVisibleGameState(player: String): VisibleGameState = {
-    VisibleGameState(Lobby, listOfMessages, listOfPlayers)
+    VisibleGameState(Lobby, listOfMessages, listOfPlayers, selectedMap)
   }
 
   override def processAction(playerContext: String, action: Action): GameState = {

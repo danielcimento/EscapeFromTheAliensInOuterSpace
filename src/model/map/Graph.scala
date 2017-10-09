@@ -3,7 +3,7 @@ package model.map
 // Represents an undirected graph.
 // Due to the context of the application, it's not likely that any search will have a
 // distance of > 2, so the path search algorithms should only be used with short distances
-case class Graph[T](vertices: Set[T], edges: Set[Edge[T]]) {
+case class Graph[T](vertices: Set[T], edges: Set[Edge[T]]) extends Serializable {
   // Returns the nodes where the predicate is true
   def findVertex(predicate: T => Boolean): Set[T] = {
     vertices.filter(predicate(_))
@@ -54,7 +54,7 @@ case class Graph[T](vertices: Set[T], edges: Set[Edge[T]]) {
   }
 }
 
-case class Edge[T](u: T, v: T) {
+case class Edge[T](u: T, v: T) extends Serializable {
   // Edges are symmetric
   override def equals(obj: Any): Boolean = {
     obj match {

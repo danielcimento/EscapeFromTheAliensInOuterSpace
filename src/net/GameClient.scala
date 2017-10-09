@@ -16,7 +16,7 @@ import main.EscapeFromTheAliensInOuterSpace
 import model.actions.{Action, QueryStateAction}
 import model.engine.ActionListener
 import model.map.{GameMap, MapConfiguration}
-import view.{GameView, SocialView}
+import view.{GameView, LobbyView, SocialView}
 
 object GameClient extends ActionListener {
   val SSL: Boolean = System.getProperty("ssl") != null
@@ -27,28 +27,12 @@ object GameClient extends ActionListener {
     channel.get.writeAndFlush(action)
   }
 
-  // TODO: Change this to render the LobbyView
   // Stage will be used later so the LobbyView knows which stage to set as the GameView when it's done
   def createScene(stage: Stage): Scene = {
-    // Render UI
-    val root: HBox = new HBox
-    // TODO: Move the entire map configuration handling to the server side. Clients should NEVER be allowed to have mismatching maps
-    val cfg: MapConfiguration = MapConfiguration.readConfigurationFromFile(classOf[EscapeFromTheAliensInOuterSpace].getResourceAsStream("resources/galilei.ser"))
-    val gameMap: GameMap = GameMap(cfg)
-    // TODO: Make the socialView a part of the GameView, instead of orthogonal to it.
-    val gameView: GameView = new GameView(this, gameMap)
-    val socialView: SocialView = new SocialView(this)
-
-    // Whenever we receive a new game state from the server, we need to pass it to the views so they can update
-    clientHandler.registerGameStateListener(gameView)
-    clientHandler.registerGameStateListener(socialView)
-
-    root.getChildren.add(gameView)
-    root.getChildren.add(socialView)
-
-    val scene: Scene = new Scene(root, EscapeFromTheAliensInOuterSpace.WIDTH, EscapeFromTheAliensInOuterSpace.HEIGHT)
-    scene.getStylesheets.add(classOf[EscapeFromTheAliensInOuterSpace].getResource("resources/stylesheet.css").toExternalForm)
-
+    val lobbyView: LobbyView = new LobbyView(GameClient, stage)
+    clientHandler.registerGameStateListener(lobbyView)
+    clientHandler.registerGameStateListener(lobbyView.socialView)
+    val scene: Scene = new Scene(lobbyView, EscapeFromTheAliensInOuterSpace.WIDTH, EscapeFromTheAliensInOuterSpace.HEIGHT)
     scene
   }
 

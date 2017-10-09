@@ -2,45 +2,50 @@ package view
 
 import javafx.geometry.Insets
 import javafx.scene.control.{Label, TextArea}
-import javafx.scene.layout.{AnchorPane, VBox}
+import javafx.scene.layout.{AnchorPane, HBox, VBox}
 
 import model.engine.{ActionListener, VisibleGameState}
 import model.map.GameMap
 
 class GameView(
   actionListener: ActionListener,
+  socialView: SocialView,
   gameMap: GameMap
-) extends VBox
+) extends HBox
   with GameStateListener {
 
-  this.setPadding(new Insets(GameView.MARGIN_OUTER))
-  this.setSpacing(10)
-  this.setMinHeight(GameView.MAP_HEIGHT)
-  this.setMinWidth(GameView.MAP_WIDTH)
+  val mapAndNotifications: VBox = new VBox()
+  mapAndNotifications.setPadding(new Insets(GameView.MARGIN_OUTER))
+  mapAndNotifications.setSpacing(10)
+  mapAndNotifications.setMinHeight(GameView.MAP_HEIGHT)
+  mapAndNotifications.setMinWidth(GameView.MAP_WIDTH)
 
   // Label for the model.map
-  val mapLabel: Label = new Label("Game Map")
-  this.getChildren.add(mapLabel)
+  private val mapLabel: Label = new Label("Game Map")
+  mapAndNotifications.getChildren.add(mapLabel)
 
   // model.map
-  val mapGroup: AnchorPane = new AnchorPane
+  private val mapGroup: AnchorPane = new AnchorPane
   mapGroup.minHeight(GameView.MAP_WIDTH)
   mapGroup.minWidth(GameView.MAP_HEIGHT)
   mapGroup.prefHeight(GameView.MAP_HEIGHT)
   mapGroup.getStyleClass.add("game-window")
   val hexGrid: HexagonGrid = new HexagonGrid(23, 14, 10.0, 10.0, 30, actionListener, gameMap)
   mapGroup.getChildren.add(hexGrid)
-  this.getChildren.add(mapGroup)
+  mapAndNotifications.getChildren.add(mapGroup)
 
   // Label for game notifications
-  val gameNotificationsLabel = new Label("Game Notifications")
-  this.getChildren.add(gameNotificationsLabel)
+  private val gameNotificationsLabel = new Label("Game Notifications")
+  mapAndNotifications.getChildren.add(gameNotificationsLabel)
 
   // Game notifications
   private val notificationsArea = new TextArea
   notificationsArea.setEditable(false)
   notificationsArea.setWrapText(true)
-  this.getChildren.add(notificationsArea)
+  mapAndNotifications.getChildren.add(notificationsArea)
+
+  this.getChildren.add(mapAndNotifications)
+  this.getChildren.add(socialView)
 
   override def gameStateChanged(vgs: VisibleGameState) = {
     // TODO: Fill with game state changes

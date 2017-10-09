@@ -28,7 +28,8 @@ class HexagonGrid(
   val topLeftY: Double,
   val size: Double,
   val actionListener: ActionListener,
-  val gameMap: GameMap
+  val gameMap: GameMap,
+  val addLabels: Boolean = true
 ) extends Group() {
 
   // In a name with format "c##", the i co-ordinate is c - 'A'. The j co-ordinate is ## - 1
@@ -58,6 +59,9 @@ class HexagonGrid(
 
       val label: Text = new Text(currentXCoordinate - (size/3), currentYCoordinate+(size/5), tile.name)
       label.setMouseTransparent(true)
+      if(!addLabels) {
+        label.setVisible(false)
+      }
       val hex: HexagonShape = new HexagonShape(currentXCoordinate, currentYCoordinate, size, tile, actionListener)
       // We don't want to render tiles that are non-interactive. Special tiles don't have a label on them.
       thisNodeType match {

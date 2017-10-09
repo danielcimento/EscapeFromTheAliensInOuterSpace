@@ -7,7 +7,7 @@ import scala.collection.immutable.NumericRange.Inclusive
 import scalaz.syntax.std.boolean._
 import scala.languageFeature.implicitConversions
 
-class GameMap(nodeGraph: Graph[MapNode]) {
+class GameMap(nodeGraph: Graph[MapNode]) extends Serializable {
   def findTiles(predicate: MapNode => Boolean): Set[MapNode] = nodeGraph.findVertex(predicate)
 
   // TODO: Fix problem where players can move to/through blocked tiles

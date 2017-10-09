@@ -1,6 +1,6 @@
 package model.player
 
-sealed trait Status
+sealed trait Status extends Serializable
 
 object Alive extends Status
 object Dead extends Status
